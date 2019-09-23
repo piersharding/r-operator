@@ -1,0 +1,3 @@
+FROM debian:stretch-slim
+
+COPY ./r-operator /usr/bin/r-operator

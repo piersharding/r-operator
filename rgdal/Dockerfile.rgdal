@@ -1,0 +1,23 @@
+FROM rocker/shiny:latest
+
+LABEL \
+      author="Piers Harding <piers@ompka.net>" \
+      description="R shiny reference image with RGDAL" \
+      license="Apache2.0" \
+      registry="library/piersharding/rgdal" \
+      vendor="None" \
+      net.ompka.team="Systems Team" \
+      net.ompka.version="0.1.0" \
+      net.ompka.website="http://github.com/piersharding/r-operator/"
+
+ENV \
+    LC_ALL=C.UTF-8 \
+    LANG=C.UTF-8 \
+    HOME=/root \
+    DEBIAN_FRONTEND=noninteractive
+
+RUN \
+    apt update -y && \
+    apt install -y libgdal-dev libproj-dev libssl-dev && \
+    apt clean -y && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*

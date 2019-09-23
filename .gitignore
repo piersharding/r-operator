@@ -1,0 +1,4 @@
+PrivateRules.mak
+vendor
+/.vscode
+/r-operator

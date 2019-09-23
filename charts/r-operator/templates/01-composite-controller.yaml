@@ -1,0 +1,35 @@
+{{ if .Values.controller.enabled }}
+---
+apiVersion: metacontroller.k8s.io/v1alpha1
+kind: CompositeController
+metadata:
+  name: r-controller
+spec:
+  generateSelector: true
+  resyncPeriodSeconds: 10
+  parentResource:
+    apiVersion: piersharding.com/v1
+    resource: rapps
+  childResources:
+    - apiVersion: v1
+      resource: configmaps
+      updateStrategy:
+        method: InPlace
+    - apiVersion: v1
+      resource: services
+      updateStrategy:
+        method: Recreate
+    - apiVersion: apps/v1
+      resource: deployments
+      updateStrategy:
+        method: RollingUpdate
+    - apiVersion: extensions/v1beta1
+      resource: ingresses
+      updateStrategy:
+        method: Recreate
+  hooks:
+    sync:
+      webhook:
+        url: http://r-controller-{{ template "r-operator.name" . }}-{{ .Release.Name }}.{{ .Release.Namespace }}/sync
+
+{{ end }}

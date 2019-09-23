@@ -1,0 +1,60 @@
+{{ if .Values.controller.enabled }}
+apiVersion: apiextensions.k8s.io/v1beta1
+kind: CustomResourceDefinition
+metadata:
+  name: rapps.piersharding.com
+spec:
+  group: piersharding.com
+  version: v1
+  scope: Namespaced
+  names:
+    plural: rapps
+    singular: rapp
+    kind: Rapp
+  subresources:
+    status: {}
+  additionalPrinterColumns:
+  - name: Components
+    type: integer
+    description: The number of Components Requested in the Dask
+    priority: 0
+    JSONPath: .status.replicas
+  - name: Succeeded
+    type: integer
+    priority: 0
+    description: The number of Components Launched in the Dask
+    JSONPath: .status.succeeded
+  - name: Age
+    priority: 0
+    JSONPath: .metadata.creationTimestamp
+    type: date
+  - name: State
+    JSONPath: .status.state
+    type: string
+    priority: 0
+    description: Status of the Dask
+  - name: Resources
+    JSONPath: .status.resources
+    type: string
+    priority: 1
+    description: Resource details of the Dask
+  validation:
+    openAPIV3Schema:
+      properties:
+        spec:
+          title: The Rapp spec
+          description: replicas should be specified
+          properties:
+            replicas:
+              title: Total number of replicas
+              description: Required replicas for the Rapp cluster
+              type: integer
+              minimum: 1
+            daemon:
+              title: Daemon, strictly one per node
+              description: Force Rapp cluster to launch one per node
+              type: boolean
+          required:
+          - replicas
+
+{{ end }}

@@ -1,0 +1,9 @@
+Dockerfile*
+Makefile
+charts
+.git
+bundles
+.gopath
+vendor/pkg
+.go-pkg-cache
+.vscode
